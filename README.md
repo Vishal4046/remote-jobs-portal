@@ -1,6 +1,6 @@
 # Remote Jobs Portal
 
-A full-stack web application that connects job seekers with recruiters for remote job opportunities. The project includes job browsing, applications, bookmarks, authentication, and recruiter-side job posting features.
+A full-stack remote job portal with JWT authentication, job search/filtering, bookmarking, and recruiter job posting — built with React, Node.js, Express, and MongoDB.
 
 ## Project Overview
 
