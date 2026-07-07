@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RemoteHive – Find Your Remote Dream Job</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--brand:#1a1a2e;--accent:#e94560;--accent2:#0f3460;--gold:#f5a623;
+--bg:#f8f7f4;--card:#fff;--text:#1a1a2e;--muted:#6b7280;
+--border:#e5e7eb;--green:#10b981;--blue:#3b82f6;--purple:#8b5cf6;
+font-family:'DM Sans',sans-serif;
+}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+h1,h2,h3,h4,.logo,.nav-link,.btn{font-family:'Syne',sans-serif}
+/* NAVBAR */
+nav{background:var(--brand);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100}
+.logo{color:#fff;font-size:1.4rem;font-weight:800;letter-spacing:-0.5px;cursor:pointer}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-link{color:#cbd5e1;font-size:.85rem;cursor:pointer;padding:.4rem .6rem;border-radius:6px;transition:.2s;font-weight:600;letter-spacing:.3px}
+.nav-link:hover,.nav-link.active{color:#fff;background:rgba(255,255,255,.1)}
+.nav-cta{background:var(--accent);color:#fff;padding:.5rem 1.2rem;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:700;border:none;transition:.2s}
+.nav-cta:hover{background:#c73652}
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--brand) 0%,#16213e 60%,#0f3460 100%);color:#fff;padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-20%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(233,69,96,.15),transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.3);color:#f8a5b5;padding:.4rem 1rem;border-radius:999px;font-size:.8rem;font-weight:600;margin-bottom:1.5rem;letter-spacing:.5px}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;margin-bottom:1rem;letter-spacing:-1px}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero p{color:#94a3b8;font-size:1.05rem;max-width:540px;margin:0 auto 2rem;line-height:1.7}
+.search-box{background:#fff;border-radius:14px;padding:.5rem;display:flex;gap:.5rem;max-width:680px;margin:0 auto 2rem;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.search-box input,.search-box select{border:none;outline:none;font-size:.95rem;padding:.6rem 1rem;border-radius:10px;background:#f8f7f4;color:var(--text);font-family:'DM Sans',sans-serif}
+.search-box input{flex:1}
+.search-box select{min-width:140px}
+.search-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:.6rem 1.5rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;font-size:.95rem;white-space:nowrap}
+.search-btn:hover{background:#c73652}
+.hero-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-size:1.6rem;font-weight:800;font-family:'Syne',sans-serif;color:#fff}
+.stat-label{font-size:.8rem;color:#64748b;margin-top:.2rem}
+/* SECTION */
+.section{padding:3.5rem 2rem;max-width:1200px;margin:0 auto}
+.section-header{margin-bottom:2rem}
+.section-header h2{font-size:1.8rem;font-weight:800;letter-spacing:-0.5px}
+.section-header p{color:var(--muted);margin-top:.4rem}
+.section-header-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2rem}
+/* FILTERS */
+.filters{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2rem}
+.filter-btn{padding:.4rem 1rem;border-radius:999px;border:1.5px solid var(--border);background:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.2s;color:var(--text)}
+.filter-btn:hover,.filter-btn.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+/* JOB CARDS */
+.jobs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.2rem}
+.job-card{background:var(--card);border-radius:16px;border:1.5px solid var(--border);padding:1.4rem;cursor:pointer;transition:.2s;position:relative}
+.job-card:hover{border-color:var(--accent);box-shadow:0 8px 30px rgba(233,69,96,.1);transform:translateY(-2px)}
+.job-card-top{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1rem}
+.company-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.job-info h3{font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.job-company{font-size:.85rem;color:var(--muted)}
+.job-badges{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+.badge{padding:.25rem .7rem;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.3px;font-family:'Syne',sans-serif}
+.badge-remote{background:#ecfdf5;color:#065f46}
+.badge-type{background:#eff6ff;color:#1e40af}
+.badge-new{background:#fef3c7;color:#92400e}
+.badge-hot{background:#fee2e2;color:#991b1b}
+.badge-featured{background:#f5f3ff;color:#4c1d95}
+.job-meta{display:flex;gap:1rem;font-size:.82rem;color:var(--muted);margin-bottom:1rem;flex-wrap:wrap}
+.job-meta span::before{margin-right:.3rem}
+.job-salary{font-size:1rem;font-weight:700;color:var(--green);font-family:'Syne',sans-serif}
+.job-card-footer{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;border-top:1px solid var(--border)}
+.apply-mini{background:var(--accent);color:#fff;border:none;padding:.4rem 1rem;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:.2s}
+.apply-mini:hover{background:#c73652}
+.save-btn{background:none;border:1.5px solid var(--border);width:34px;height:34px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:.2s}
+.save-btn:hover{border-color:var(--accent);background:#fee2e2}
+/* CATEGORIES */
+.categories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem}
+.cat-card{background:var(--card);border-radius:14px;border:1.5px solid var(--border);padding:1.2rem;text-align:center;cursor:pointer;transition:.2s}
+.cat-card:hover{border-color:var(--accent);box-shadow:0 4px 20px rgba(233,69,96,.1)}
+.cat-icon{font-size:2rem;margin-bottom:.6rem}
+.cat-name{font-size:.85rem;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:.2rem}
+.cat-count{font-size:.75rem;color:var(--muted)}
+/* COMPANIES */
+.companies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.company-card{background:var(--card);border-radius:14px;border:1.5px solid var(--border);padding:1.2rem;cursor:pointer;transition:.2s;display:flex;gap:.8rem;align-items:center}
+.company-card:hover{border-color:var(--accent);box-shadow:0 4px 20px rgba(233,69,96,.1)}
+.co-logo{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.co-name{font-weight:700;font-size:.9rem;font-family:'Syne',sans-serif}
+.co-jobs{font-size:.75rem;color:var(--muted);margin-top:.2rem}
+.co-remote{font-size:.7rem;color:var(--green);font-weight:700;margin-top:.3rem}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal{background:#fff;border-radius:20px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,.3)}
+.modal-header{background:var(--brand);color:#fff;padding:2rem;border-radius:20px 20px 0 0;position:relative}
+.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center}
+.modal-body{padding:1.5rem}
+.modal-section{margin-bottom:1.5rem}
+.modal-section h4{font-size:.9rem;font-weight:700;margin-bottom:.6rem;color:var(--text);font-family:'Syne',sans-serif}
+.modal-section p,.modal-section ul{font-size:.9rem;color:var(--muted);line-height:1.7}
+.modal-section ul{padding-left:1.2rem}
+.apply-full{width:100%;background:var(--accent);color:#fff;border:none;padding:1rem;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;margin-top:.5rem;transition:.2s}
+.apply-full:hover{background:#c73652}
+/* APPLICATION FORM */
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:.82rem;font-weight:700;margin-bottom:.4rem;font-family:'Syne',sans-serif}
+.form-group input,.form-group textarea,.form-group select{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s;background:#fff}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group textarea{resize:vertical;min-height:100px}
+/* PROFILE PAGE */
+.profile-header{background:linear-gradient(135deg,var(--brand),#0f3460);padding:2.5rem 2rem;color:#fff;text-align:center}
+.avatar{width:80px;height:80px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1rem;border:3px solid rgba(255,255,255,.3)}
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--brand);color:#fff;padding:1rem 1.5rem;border-radius:12px;font-size:.9rem;font-weight:600;z-index:300;animation:slideIn .3s ease;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+/* TABS */
+.tabs{display:flex;gap:.3rem;background:#f1f5f9;padding:.3rem;border-radius:10px;margin-bottom:2rem}
+.tab{flex:1;padding:.5rem;text-align:center;border-radius:8px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:'Syne',sans-serif;transition:.2s;color:var(--muted)}
+.tab.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.1)}
+/* VIEW LINK */
+.view-all{color:var(--accent);font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif}
+.view-all:hover{text-decoration:underline}
+/* FOOTER */
+footer{background:var(--brand);color:#94a3b8;padding:3rem 2rem 1.5rem;margin-top:4rem}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;max-width:1200px;margin:0 auto 2rem}
+.footer-col h4{color:#fff;font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem}
+.footer-col a{display:block;color:#64748b;font-size:.85rem;margin-bottom:.5rem;cursor:pointer;transition:.2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{border-top:1px solid #1e293b;padding-top:1rem;text-align:center;font-size:.8rem;max-width:1200px;margin:0 auto}
+/* RESPONSIVE */
+@media(max-width:600px){
+.search-box{flex-direction:column}
+.search-box select{min-width:auto}
+.hero h1{font-size:1.8rem}
+.jobs-grid{grid-template-columns:1fr}
+.nav-links{gap:.8rem}
+}
+/* TAGS */
+.skill-tag{background:#f1f5f9;color:#374151;padding:.3rem .7rem;border-radius:6px;font-size:.75rem;font-weight:600;display:inline-block;margin:.2rem}
+/* PAGE TRANSITIONS */
+.page{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="logo" onclick="showPage('home')">Remote<span>Hive</span></div>
+  <div class="nav-links">
+    <span class="nav-link active" id="nav-home" onclick="setPage('home')">Home</span>
+    <span class="nav-link" id="nav-jobs" onclick="setPage('jobs')">Find Jobs</span>
+    <span class="nav-link" id="nav-companies" onclick="setPage('companies')">Companies</span>
+    <span class="nav-link" id="nav-profile" onclick="setPage('profile')">Profile</span>
+    <button class="nav-cta" onclick="setPage('post')">Post a Job</button>
+  </div>
+</nav>
+
+<div id="app"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" style="display:none" onclick="closeModal(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast" style="display:none"></div>
+
+<script>
+const JOBS = [
+  {id:1,title:"Senior Frontend Engineer",company:"Stripe",logo:"💳",logoColor:"#635BFF",type:"Full-time",tags:["React","TypeScript","Node.js"],salary:"$120k–$160k",location:"Worldwide",posted:"2h ago",category:"Engineering",hot:true,featured:true,desc:"Lead frontend development for Stripe's dashboard products. You'll work with a world-class team building tools used by millions of businesses.",req:["5+ years React","TypeScript expert","System design knowledge","Remote collaboration skills"],perks:["$4k home office stipend","Unlimited PTO","Equity compensation","Premium health insurance"]},
+  {id:2,title:"Product Designer (Remote)",company:"Figma",logo:"🎨",logoColor:"#A259FF",type:"Full-time",tags:["Figma","UX","Design Systems"],salary:"$110k–$145k",location:"Americas",posted:"5h ago",category:"Design",featured:true,desc:"Shape the future of design tooling at Figma. Partner with engineers and PMs to craft delightful user experiences for our collaborative design platform.",req:["Portfolio of shipped products","Proficiency in Figma","User research skills","Component system expertise"],perks:["Remote-first culture","$3k learning budget","Flexible hours","Top-tier equipment"]},
+  {id:3,title:"Senior DevOps Engineer",company:"Cloudflare",logo:"☁️",logoColor:"#F38020",type:"Full-time",tags:["Kubernetes","AWS","CI/CD","Go"],salary:"$130k–$170k",location:"Worldwide",posted:"1d ago",category:"Engineering",hot:true,desc:"Own the infrastructure powering Cloudflare's global network serving millions of requests per second. Build and scale world-class systems.",req:["Kubernetes expert","AWS/GCP experience","Infrastructure as Code","On-call rotation"],perks:["Competitive equity","Remote stipend $2k/yr","Team retreats","Learning & development"]},
+  {id:4,title:"Growth Marketing Manager",company:"Notion",logo:"📝",logoColor:"#000000",type:"Full-time",tags:["SEO","Analytics","Content","Growth"],salary:"$90k–$120k",location:"US/EU",posted:"2d ago",category:"Marketing",desc:"Drive Notion's growth through data-driven marketing experiments. Own acquisition channels and build scalable growth loops.",req:["3+ years growth marketing","SQL proficiency","Experimentation mindset","Cross-channel expertise"],perks:["Notion Pro account","Home office setup","PTO + wellness days","Annual team retreats"]},
+  {id:5,title:"Backend Engineer – Golang",company:"Vercel",logo:"▲",logoColor:"#000000",type:"Full-time",tags:["Go","PostgreSQL","Redis","API"],salary:"$115k–$155k",location:"Worldwide",posted:"3d ago",category:"Engineering",desc:"Build the infrastructure that powers millions of deployments daily. Work on edge computing, serverless functions, and developer tooling.",req:["Go expert","Distributed systems","Database optimization","High-traffic APIs"],perks:["Vercel Pro plan","Remote-first","Equity + salary","Conference budget"]},
+  {id:6,title:"Data Scientist",company:"Airbnb",logo:"🏠",logoColor:"#FF5A5F",type:"Full-time",tags:["Python","ML","SQL","dbt"],salary:"$125k–$165k",location:"Americas",posted:"4d ago",category:"Data",desc:"Use data to shape one of the world's most beloved travel platforms. Build models that improve host and guest matching, pricing, and trust.",req:["PhD or 4+ yr experience","Python/R proficiency","ML model deployment","Causal inference"],perks:["Annual travel credit $2k","RSU grants","Premium healthcare","Remote allowance"]},
+  {id:7,title:"Customer Success Manager",company:"HubSpot",logo:"🧲",logoColor:"#FF7A59",type:"Full-time",tags:["CRM","SaaS","Onboarding","Renewal"],salary:"$75k–$100k",location:"US Only",posted:"1d ago",category:"Operations",new:true,desc:"Own the success of HubSpot's SMB customers. Drive adoption, retention, and expansion by being their trusted advisor.",req:["2+ years SaaS CSM","Excellent communicator","CRM proficiency","Data-driven mindset"],perks:["HubSpot product access","Unlimited PTO","DEI programs","Career coaching"]},
+  {id:8,title:"iOS Engineer",company:"Duolingo",logo:"🦜",logoColor:"#58CC02",type:"Contract",tags:["Swift","UIKit","SwiftUI","A/B testing"],salary:"$100k–$140k",location:"Americas/EU",posted:"5d ago",category:"Engineering",new:true,desc:"Build gamified language learning experiences for 50M+ users. Ship fast, experiment constantly, and have a huge impact.",req:["3+ years iOS","Swift expert","CI/CD for mobile","User analytics"],perks:["Remote setup budget","Contract to perm path","Mentorship program","Flexible hours"]},
+  {id:9,title:"Technical Writer",company:"Twilio",logo:"📡",logoColor:"#F22F46",type:"Part-time",tags:["API Docs","Markdown","Postman","GitHub"],salary:"$60k–$80k",location:"Worldwide",posted:"1w ago",category:"Operations",desc:"Write clear, accurate developer documentation for Twilio's communication APIs. Help developers succeed from day one.",req:["API documentation exp","Technical background","Clear writing style","GitHub proficiency"],perks:["Flexible schedule","Remote-first","Learning stipend","Inclusive culture"]},
+];
+
+const CATEGORIES = [
+  {name:"Engineering",icon:"💻",count:2840},
+  {name:"Design",icon:"🎨",count:892},
+  {name:"Marketing",icon:"📈",count:634},
+  {name:"Data",icon:"📊",count:521},
+  {name:"Product",icon:"🧩",count:445},
+  {name:"Operations",icon:"⚙️",count:378},
+  {name:"Finance",icon:"💰",count:290},
+  {name:"Sales",icon:"🤝",count:410},
+];
+
+const COMPANIES = [
+  {name:"Stripe",logo:"💳",jobs:12,type:"Fintech"},
+  {name:"Figma",logo:"🎨",jobs:8,type:"Design Tools"},
+  {name:"Cloudflare",logo:"☁️",jobs:15,type:"Infrastructure"},
+  {name:"Notion",logo:"📝",jobs:6,type:"Productivity"},
+  {name:"Vercel",logo:"▲",jobs:10,type:"Developer Tools"},
+  {name:"Airbnb",logo:"🏠",jobs:9,type:"Travel/Hospitality"},
+  {name:"HubSpot",logo:"🧲",jobs:14,type:"CRM/Marketing"},
+  {name:"Duolingo",logo:"🦜",jobs:7,type:"EdTech"},
+];
+
+let currentPage = 'home';
+let activeFilter = 'All';
+let savedJobs = new Set();
+let appliedJobs = new Set();
+let searchQuery = '';
+let searchCategory = 'All';
+
+function setPage(page){
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const el = document.getElementById('nav-'+page);
+  if(el) el.classList.add('active');
+  currentPage = page;
+  render();
+}
+function showPage(p){setPage(p)}
+
+function render(){
+  const app = document.getElementById('app');
+  if(currentPage==='home') app.innerHTML = renderHome();
+  else if(currentPage==='jobs') app.innerHTML = renderJobs();
+  else if(currentPage==='companies') app.innerHTML = renderCompanies();
+  else if(currentPage==='profile') app.innerHTML = renderProfile();
+  else if(currentPage==='post') app.innerHTML = renderPostJob();
+}
+
+function renderHome(){
+  const featured = JOBS.filter(j=>j.featured);
+  const hot = JOBS.filter(j=>j.hot);
+  return `
+  <div class="page">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">🌍 100% Remote Opportunities</div>
+    <h1>Find Your Dream<br><em>Remote Job</em> Today</h1>
+    <p>Connect with top remote-first companies and work from anywhere in the world. Join 200,000+ professionals who've found their perfect role.</p>
+    <div class="search-box">
+      <input type="text" id="hero-search" placeholder="🔍  Job title, skill, or keyword..." value="${searchQuery}"/>
+      <select id="hero-cat">
+        <option value="All">All Categories</option>
+        ${CATEGORIES.map(c=>`<option value="${c.name}" ${searchCategory===c.name?'selected':''}>${c.name}</option>`).join('')}
+      </select>
+      <button class="search-btn" onclick="doSearch()">Search Jobs</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">8,200+</div><div class="stat-label">Active Jobs</div></div>
+      <div class="stat"><div class="stat-num">1,400+</div><div class="stat-label">Companies</div></div>
+      <div class="stat"><div class="stat-num">200k+</div><div class="stat-label">Professionals</div></div>
+      <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Satisfaction Rate</div></div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="section">
+    <div class="section-header-row">
+      <div class="section-header"><h2>Browse by Category</h2><p>Discover opportunities across industries</p></div>
+    </div>
+    <div class="categories-grid">
+      ${CATEGORIES.map(c=>`
+      <div class="cat-card" onclick="filterByCategory('${c.name}')">
+        <div class="cat-icon">${c.icon}</div>
+        <div class="cat-name">${c.name}</div>
+        <div class="cat-count">${c.count.toLocaleString()} jobs</div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <!-- FEATURED JOBS -->
+  <div class="section" style="background:var(--card);border-radius:20px;max-width:none;padding:2.5rem 2rem">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="section-header-row">
+      <div class="section-header"><h2>Featured Jobs</h2><p>Hand-picked opportunities from top companies</p></div>
+      <span class="view-all" onclick="setPage('jobs')">View all jobs →</span>
+    </div>
+    <div class="jobs-grid">
+      ${featured.map(j=>renderJobCard(j)).join('')}
+    </div>
+  </div>
+  </div>
+
+  <!-- TOP COMPANIES -->
+  <div class="section">
+    <div class="section-header-row">
+      <div class="section-header"><h2>Top Remote Companies</h2><p>Companies embracing a remote-first culture</p></div>
+      <span class="view-all" onclick="setPage('companies')">View all →</span>
+    </div>
+    <div class="companies-grid">
+      ${COMPANIES.slice(0,6).map(c=>`
+      <div class="company-card" onclick="setPage('companies')">
+        <div class="co-logo" style="background:#f8f7f4">${c.logo}</div>
+        <div>
+          <div class="co-name">${c.name}</div>
+          <div class="co-jobs">${c.jobs} open roles</div>
+          <div class="co-remote">✓ Remote-first</div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  ${renderFooter()}
+  </div>`;
+}
+
+function renderJobCard(j){
+  const saved = savedJobs.has(j.id);
+  const applied = appliedJobs.has(j.id);
+  return `
+  <div class="job-card" onclick="openJob(${j.id})">
+    ${j.featured?'<div style="position:absolute;top:1rem;right:1rem"><span class="badge badge-featured">★ Featured</span></div>':''}
+    <div class="job-card-top">
+      <div class="company-logo" style="background:${j.logoColor}22;font-size:1.4rem">${j.logo}</div>
+      <div class="job-info">
+        <h3>${j.title}</h3>
+        <div class="job-company">${j.company}</div>
+      </div>
+    </div>
+    <div class="job-badges">
+      <span class="badge badge-remote">🌐 Remote</span>
+      <span class="badge badge-type">${j.type}</span>
+      ${j.hot?'<span class="badge badge-hot">🔥 Hot</span>':''}
+      ${j.new?'<span class="badge badge-new">✨ New</span>':''}
+    </div>
+    <div class="job-meta">
+      <span>📍 ${j.location}</span>
+      <span>🕐 ${j.posted}</span>
+    </div>
+    <div style="margin-bottom:.8rem;display:flex;flex-wrap:wrap;gap:.3rem">
+      ${j.tags.map(t=>`<span class="skill-tag">${t}</span>`).join('')}
+    </div>
+    <div class="job-card-footer" onclick="event.stopPropagation()">
+      <div class="job-salary">${j.salary}</div>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <button class="save-btn" onclick="toggleSave(${j.id})" title="${saved?'Unsave':'Save'}">${saved?'❤️':'🤍'}</button>
+        <button class="apply-mini" onclick="applyJob(${j.id})" style="${applied?'background:#10b981':''}">${applied?'✓ Applied':'Apply Now'}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderJobs(){
+  const filters = ['All','Engineering','Design','Marketing','Data','Operations'];
+  let filtered = JOBS;
+  if(activeFilter!=='All') filtered = filtered.filter(j=>j.category===activeFilter);
+  if(searchQuery) filtered = filtered.filter(j=>
+    j.title.toLowerCase().includes(searchQuery.toLowerCase())||
+    j.company.toLowerCase().includes(searchQuery.toLowerCase())||
+    j.tags.some(t=>t.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+  if(searchCategory!=='All') filtered = filtered.filter(j=>j.category===searchCategory);
+  return `
+  <div class="page">
+  <div class="section">
+    <div class="section-header-row">
+      <div class="section-header"><h2>Remote Jobs</h2><p>${filtered.length} opportunities available</p></div>
+    </div>
+    <!-- SEARCH IN JOBS PAGE -->
+    <div style="display:flex;gap:.8rem;margin-bottom:1.5rem;flex-wrap:wrap">
+      <input type="text" placeholder="🔍 Search jobs..." value="${searchQuery}" oninput="updateSearch(this.value)" style="flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:10px;padding:.6rem 1rem;font-size:.9rem;outline:none;font-family:'DM Sans',sans-serif"/>
+      <select onchange="updateCat(this.value)" style="border:1.5px solid var(--border);border-radius:10px;padding:.6rem 1rem;font-size:.9rem;outline:none;font-family:'DM Sans',sans-serif">
+        <option value="All">All Categories</option>
+        ${CATEGORIES.map(c=>`<option value="${c.name}" ${searchCategory===c.name?'selected':''}>${c.name}</option>`).join('')}
+      </select>
+    </div>
+    <div class="filters">
+      ${filters.map(f=>`<button class="filter-btn ${activeFilter===f?'active':''}" onclick="setFilter('${f}')">${f}</button>`).join('')}
+    </div>
+    ${filtered.length===0?'<div style="text-align:center;padding:4rem;color:var(--muted)"><div style="font-size:3rem;margin-bottom:1rem">🔍</div><h3>No jobs found</h3><p>Try different keywords or filters</p></div>':''}
+    <div class="jobs-grid">
+      ${filtered.map(j=>renderJobCard(j)).join('')}
+    </div>
+  </div>
+  ${renderFooter()}
+  </div>`;
+}
+
+function renderCompanies(){
+  return `
+  <div class="page">
+  <div class="section">
+    <div class="section-header-row">
+      <div class="section-header"><h2>Top Remote Companies</h2><p>Discover companies that champion remote work</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem">
+      ${COMPANIES.map(c=>{
+        const jobs = JOBS.filter(j=>j.company===c.name);
+        return `
+        <div style="background:#fff;border-radius:16px;border:1.5px solid var(--border);padding:1.5rem;cursor:pointer;transition:.2s" onclick="showCompanyJobs('${c.name}')" onmouseenter="this.style.borderColor='var(--accent)'" onmouseleave="this.style.borderColor='var(--border)'">
+          <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1rem">
+            <div style="width:56px;height:56px;border-radius:14px;background:#f8f7f4;display:flex;align-items:center;justify-content:center;font-size:1.8rem">${c.logo}</div>
+            <div>
+              <div style="font-weight:700;font-size:1rem;font-family:'Syne',sans-serif">${c.name}</div>
+              <div style="font-size:.8rem;color:var(--muted)">${c.type}</div>
+              <div style="font-size:.75rem;color:var(--green);font-weight:700;margin-top:.2rem">✓ Remote-first</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">
+            <span class="badge badge-remote">🌐 Fully Remote</span>
+            <span class="badge badge-type">${c.jobs} Open Roles</span>
+          </div>
+          <button style="width:100%;background:var(--brand);color:#fff;border:none;padding:.6rem;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer">View ${jobs.length||c.jobs} Jobs →</button>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+  ${renderFooter()}
+  </div>`;
+}
+
+function renderProfile(){
+  const saved = JOBS.filter(j=>savedJobs.has(j.id));
+  const applied = JOBS.filter(j=>appliedJobs.has(j.id));
+  return `
+  <div class="page">
+  <div class="profile-header">
+    <div class="avatar">👤</div>
+    <h2 style="font-family:'Syne',sans-serif;font-weight:800;margin-bottom:.3rem">Alex Johnson</h2>
+    <p style="color:#94a3b8;font-size:.9rem">Senior Software Engineer</p>
+    <p style="color:#64748b;font-size:.85rem;margin-top:.3rem">📍 San Francisco, CA · Open to remote</p>
+  </div>
+  <div class="section" style="max-width:800px">
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('overview')">Overview</div>
+      <div class="tab" onclick="showTab('saved')">Saved (${saved.length})</div>
+      <div class="tab" onclick="showTab('applied')">Applied (${applied.length})</div>
+      <div class="tab" onclick="showTab('settings')">Settings</div>
+    </div>
+    <div id="tab-content">
+    <!-- OVERVIEW -->
+    <div id="tab-overview">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem">
+        <div style="background:#f1f5f9;border-radius:12px;padding:1rem;text-align:center">
+          <div style="font-size:1.6rem;font-weight:800;font-family:'Syne',sans-serif">${applied.size||applied.length}</div>
+          <div style="font-size:.8rem;color:var(--muted)">Applications</div>
+        </div>
+        <div style="background:#f1f5f9;border-radius:12px;padding:1rem;text-align:center">
+          <div style="font-size:1.6rem;font-weight:800;font-family:'Syne',sans-serif">${saved.length}</div>
+          <div style="font-size:.8rem;color:var(--muted)">Saved Jobs</div>
+        </div>
+        <div style="background:#f1f5f9;border-radius:12px;padding:1rem;text-align:center">
+          <div style="font-size:1.6rem;font-weight:800;font-family:'Syne',sans-serif">3</div>
+          <div style="font-size:.8rem;color:var(--muted)">Interviews</div>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:16px;border:1.5px solid var(--border);padding:1.5rem;margin-bottom:1rem">
+        <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem">Skills</h4>
+        <div>${['React','TypeScript','Node.js','PostgreSQL','AWS','Docker','Python','GraphQL'].map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+      </div>
+      <div style="background:#fff;border-radius:16px;border:1.5px solid var(--border);padding:1.5rem">
+        <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem">Experience</h4>
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <div><div style="font-weight:700;font-size:.9rem">Senior Engineer @ Stripe</div><div style="font-size:.8rem;color:var(--muted)">2021 – Present · Remote</div></div>
+          <div><div style="font-weight:700;font-size:.9rem">Engineer @ Vercel</div><div style="font-size:.8rem;color:var(--muted)">2019 – 2021 · Remote</div></div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  ${renderFooter()}
+  </div>`;
+}
+
+function renderPostJob(){
+  return `
+  <div class="page">
+  <div class="hero" style="padding:3rem 2rem 2rem;text-align:left">
+    <h1 style="font-size:2rem">Post a <em>Remote Job</em></h1>
+    <p style="margin-bottom:0">Reach 200,000+ remote professionals actively looking for their next role.</p>
+  </div>
+  <div class="section" style="max-width:700px">
+    <div style="background:#fff;border-radius:20px;border:1.5px solid var(--border);padding:2rem">
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;margin-bottom:1.5rem">Job Details</h3>
+      <div class="form-group"><label>Job Title *</label><input type="text" placeholder="e.g. Senior Frontend Engineer"/></div>
+      <div class="form-group"><label>Company Name *</label><input type="text" placeholder="Your company name"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group"><label>Job Type *</label><select><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Freelance</option></select></div>
+        <div class="form-group"><label>Category *</label><select>${CATEGORIES.map(c=>`<option>${c.name}</option>`).join('')}</select></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group"><label>Min Salary (USD)</label><input type="number" placeholder="e.g. 80000"/></div>
+        <div class="form-group"><label>Max Salary (USD)</label><input type="number" placeholder="e.g. 120000"/></div>
+      </div>
+      <div class="form-group"><label>Location Restriction</label><select><option>Worldwide</option><option>Americas Only</option><option>US Only</option><option>EU Only</option><option>APAC Only</option></select></div>
+      <div class="form-group"><label>Job Description *</label><textarea placeholder="Describe the role, responsibilities, and what success looks like..."></textarea></div>
+      <div class="form-group"><label>Requirements</label><textarea placeholder="List required skills and qualifications..."></textarea></div>
+      <div class="form-group"><label>Perks & Benefits</label><textarea placeholder="Equity, health insurance, stipends..."></textarea></div>
+      <div class="form-group"><label>Company Email *</label><input type="email" placeholder="hiring@yourcompany.com"/></div>
+      <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:1rem;margin-bottom:1rem;font-size:.85rem;color:#166534">
+        ✓ Your job will be reviewed within 24 hours and live for 30 days.
+      </div>
+      <button class="apply-full" onclick="submitJob()">Publish Job Listing</button>
+    </div>
+  </div>
+  ${renderFooter()}
+  </div>`;
+}
+
+function renderFooter(){
+  return `
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="margin-bottom:1rem">Remote<span>Hive</span></div>
+        <p style="font-size:.82rem;line-height:1.7">The world's leading remote job platform. Connecting top talent with remote-first companies globally.</p>
+      </div>
+      <div class="footer-col">
+        <h4>For Job Seekers</h4>
+        <a>Browse Jobs</a><a>Top Companies</a><a>Career Resources</a><a>Salary Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4>For Employers</h4>
+        <a onclick="setPage('post')">Post a Job</a><a>Pricing</a><a>Talent Search</a><a>Employer Branding</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a>About Us</a><a>Blog</a><a>Careers</a><a>Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2024 RemoteHive. All rights reserved. Built with ❤️ for remote workers worldwide.</div>
+  </footer>`;
+}
+
+function openJob(id){
+  const j = JOBS.find(j=>j.id===id);
+  if(!j) return;
+  const applied = appliedJobs.has(j.id);
+  document.getElementById('modal-content').innerHTML = `
+  <div class="modal-header">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1rem">
+      <div style="width:56px;height:56px;border-radius:14px;background:${j.logoColor}22;display:flex;align-items:center;justify-content:center;font-size:1.8rem">${j.logo}</div>
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:.3rem">${j.title}</h2>
+        <div style="color:#94a3b8;font-size:.9rem">${j.company} · ${j.location}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <span class="badge badge-remote" style="background:rgba(16,185,129,.15);color:#6ee7b7">🌐 Remote</span>
+      <span class="badge badge-type" style="background:rgba(59,130,246,.15);color:#93c5fd">${j.type}</span>
+      ${j.hot?'<span class="badge badge-hot" style="background:rgba(239,68,68,.15);color:#fca5a5">🔥 Hot</span>':''}
+    </div>
+  </div>
+  <div class="modal-body">
+    <div style="display:flex;gap:1.5rem;padding:1rem;background:#f8f7f4;border-radius:12px;margin-bottom:1.5rem;flex-wrap:wrap">
+      <div><div style="font-size:.75rem;color:var(--muted)">Salary</div><div style="font-weight:700;color:var(--green);font-family:'Syne',sans-serif">${j.salary}</div></div>
+      <div><div style="font-size:.75rem;color:var(--muted)">Posted</div><div style="font-weight:700;font-family:'Syne',sans-serif">${j.posted}</div></div>
+      <div><div style="font-size:.75rem;color:var(--muted)">Category</div><div style="font-weight:700;font-family:'Syne',sans-serif">${j.category}</div></div>
+    </div>
+    <div class="modal-section"><h4>About the Role</h4><p>${j.desc}</p></div>
+    <div class="modal-section"><h4>Skills Required</h4><div>${j.tags.map(t=>`<span class="skill-tag">${t}</span>`).join('')}</div></div>
+    <div class="modal-section"><h4>Requirements</h4><ul>${j.req.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+    <div class="modal-section"><h4>Perks & Benefits</h4><ul>${j.perks.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+    <button class="apply-full" onclick="openApplyForm(${j.id})" style="${applied?'background:#10b981':''}">${applied?'✓ Already Applied — Apply Again':'Apply for this Position'}</button>
+  </div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+function openApplyForm(id){
+  const j = JOBS.find(j=>j.id===id);
+  document.getElementById('modal-content').innerHTML = `
+  <div class="modal-header">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 style="font-family:'Syne',sans-serif;font-weight:800">Apply – ${j.title}</h2>
+    <div style="color:#94a3b8;font-size:.9rem;margin-top:.3rem">${j.company}</div>
+  </div>
+  <div class="modal-body">
+    <div class="form-group"><label>Full Name *</label><input type="text" placeholder="Alex Johnson"/></div>
+    <div class="form-group"><label>Email *</label><input type="email" placeholder="you@email.com"/></div>
+    <div class="form-group"><label>LinkedIn URL</label><input type="url" placeholder="https://linkedin.com/in/..."/></div>
+    <div class="form-group"><label>Portfolio / GitHub</label><input type="url" placeholder="https://github.com/..."/></div>
+    <div class="form-group"><label>Years of Experience</label><select><option>0–1 years</option><option>2–3 years</option><option>4–6 years</option><option>7+ years</option></select></div>
+    <div class="form-group"><label>Cover Letter</label><textarea placeholder="Tell us why you're a great fit for this role..."></textarea></div>
+    <div class="form-group"><label>Resume (PDF)</label><input type="file" accept=".pdf,.doc,.docx" style="border:1.5px dashed var(--border);padding:1rem;cursor:pointer"/></div>
+    <button class="apply-full" onclick="submitApplication(${id})">Submit Application 🚀</button>
+  </div>`;
+}
+
+function submitApplication(id){
+  appliedJobs.add(id);
+  closeModal();
+  showToast('🎉 Application submitted! Good luck!');
+  render();
+}
+
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modal')){
+    document.getElementById('modal').style.display='none';
+  }
+}
+
+function toggleSave(id){
+  if(savedJobs.has(id)){savedJobs.delete(id);showToast('Removed from saved jobs');}
+  else{savedJobs.add(id);showToast('❤️ Job saved!');}
+  render();
+}
+
+function applyJob(id){
+  openJob(id);
+  setTimeout(()=>openApplyForm(id),100);
+}
+
+function setFilter(f){
+  activeFilter=f;
+  render();
+}
+
+function doSearch(){
+  const q = document.getElementById('hero-search').value;
+  const cat = document.getElementById('hero-cat').value;
+  searchQuery = q;
+  searchCategory = cat;
+  setPage('jobs');
+}
+
+function updateSearch(v){searchQuery=v;render();}
+function updateCat(v){searchCategory=v;render();}
+
+function filterByCategory(cat){
+  searchCategory=cat;
+  activeFilter=cat;
+  setPage('jobs');
+}
+
+function showTab(tab){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active',['overview','saved','applied','settings'][i]===tab);
+  });
+  const saved = JOBS.filter(j=>savedJobs.has(j.id));
+  const applied = JOBS.filter(j=>appliedJobs.has(j.id));
+  const content = document.getElementById('tab-content');
+  if(tab==='saved'){
+    content.innerHTML = saved.length===0?'<div style="text-align:center;padding:3rem;color:var(--muted)"><div style="font-size:3rem">🤍</div><p style="margin-top:1rem">No saved jobs yet. Browse jobs and save your favorites!</p></div>':`<div class="jobs-grid">${saved.map(j=>renderJobCard(j)).join('')}</div>`;
+  } else if(tab==='applied'){
+    content.innerHTML = applied.length===0?'<div style="text-align:center;padding:3rem;color:var(--muted)"><div style="font-size:3rem">📋</div><p style="margin-top:1rem">No applications yet. Start applying to jobs!</p></div>':`<div class="jobs-grid">${applied.map(j=>renderJobCard(j)).join('')}</div>`;
+  } else if(tab==='settings'){
+    content.innerHTML = `
+    <div style="background:#fff;border-radius:16px;border:1.5px solid var(--border);padding:1.5rem">
+      <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1.5rem">Profile Settings</h4>
+      <div class="form-group"><label>Full Name</label><input type="text" value="Alex Johnson"/></div>
+      <div class="form-group"><label>Email</label><input type="email" value="alex@example.com"/></div>
+      <div class="form-group"><label>Job Title</label><input type="text" value="Senior Software Engineer"/></div>
+      <div class="form-group"><label>Location</label><input type="text" value="San Francisco, CA"/></div>
+      <div class="form-group"><label>Preferred Salary (USD)</label><input type="text" value="120,000 – 160,000"/></div>
+      <div class="form-group"><label>Bio</label><textarea style="min-height:80px">Full-stack engineer with 6+ years of experience building scalable web applications. Passionate about remote work and open-source.</textarea></div>
+      <button class="apply-full" onclick="showToast('✓ Profile updated successfully')">Save Changes</button>
+    </div>`;
+  } else {
+    content.innerHTML = document.getElementById('tab-overview').innerHTML||'';
+    setPage('profile');
+    return;
+  }
+}
+
+function showCompanyJobs(name){
+  const jobs = JOBS.filter(j=>j.company===name);
+  if(jobs.length===0){showToast('No open roles at '+name+' right now');return;}
+  document.getElementById('modal-content').innerHTML = `
+  <div class="modal-header">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 style="font-family:'Syne',sans-serif;font-weight:800">${name} – Open Roles</h2>
+    <div style="color:#94a3b8;font-size:.9rem;margin-top:.3rem">${jobs.length} positions available</div>
+  </div>
+  <div class="modal-body">
+    ${jobs.map(j=>`
+    <div style="background:#f8f7f4;border-radius:12px;padding:1rem;margin-bottom:.8rem;cursor:pointer" onclick="closeModal();setTimeout(()=>openJob(${j.id}),100)">
+      <div style="font-weight:700;font-family:'Syne',sans-serif">${j.title}</div>
+      <div style="font-size:.82rem;color:var(--muted);margin-top:.3rem">${j.type} · ${j.location} · ${j.salary}</div>
+    </div>`).join('')}
+  </div>`;
+  document.getElementById('modal').style.display='flex';
+}
+
+function submitJob(){showToast('🎉 Job listing submitted for review!');}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.display='block';
+  setTimeout(()=>{t.style.display='none'},3000);
+}
+
+render();
+</script>
+</body>
+</html>
